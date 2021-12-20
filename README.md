@@ -4,4 +4,5 @@ This repo contains projects written in [Ballerina programming language](https://
 
 ## Examples
 
-1. [Parallel Matrix Multiplication](parallel_matrix_multiplication)
+* Concurrency
+  - [Parallel Matrix Multiplication](parallel_matrix_multiplication)
