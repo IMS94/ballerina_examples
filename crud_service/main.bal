@@ -1,8 +1,9 @@
 import ballerina/http;
 import ballerina/log;
-import ballerina/uuid;
 import crud_service.types;
+import ballerina/uuid;
 
+# The product service
 service /products on new http:Listener(8080) {
 
     private map<types:Product> products = {};
@@ -13,11 +14,12 @@ service /products on new http:Listener(8080) {
         return self.products.toArray();
     }
 
+
     # Add a new product
     #
     # + product - Product to be added
     # + return - http created or bad request
-    resource function post .(@http:Payload types:Product product) returns http:Created|types:BadRequest {
+    resource function post .(@http:Payload types:Product product) returns types:Created|types:BadRequest {
         if product.name.length() == 0 || product.description.length() == 0 {
             log:printWarn("Product name or description is not present", product = product);
             return <types:BadRequest>{
@@ -30,7 +32,7 @@ service /products on new http:Listener(8080) {
             };
         }
 
-        if product.price.amount >= 0.0 {
+        if product.price.amount < 0.0 {
             log:printWarn("Product price cannot be negative", product = product);
             return <types:BadRequest>{
                 body: {
@@ -42,11 +44,17 @@ service /products on new http:Listener(8080) {
             };
         }
 
-        log:printInfo("Adding new product", product = product);
+        log:printDebug("Adding new product", product = product);
         product.id = uuid:createType1AsString();
         self.products[<string>product.id] = product;
+        log:printInfo("Added new product", product = product);
 
-        return {};
+        string productUrl = string `/products/${<string>product.id}`;
+        return <types:Created>{
+            headers: {
+                location: productUrl
+            }
+        };
     }
 
     # Update a product
@@ -76,7 +84,7 @@ service /products on new http:Listener(8080) {
     # + id - Product ID
     # + return - Ok or bad request
     resource function delete [string id]() returns types:BadRequest? {
-        if self.products.hasKey(<string>id) {
+        if !self.products.hasKey(<string>id) {
             log:printWarn("Invalid product ID to be deleted", id = id);
             return {
                 body: {

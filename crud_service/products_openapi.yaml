@@ -1,0 +1,117 @@
+openapi: 3.0.1
+info:
+  title: Products
+  version: 0.1.0
+servers:
+- url: "{server}:{port}/products"
+  variables:
+    server:
+      default: http://localhost
+    port:
+      default: "8080"
+paths:
+  /:
+    put:
+      summary: Update a product
+      operationId: operation_put
+      requestBody:
+        description: Updated product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Add a new product
+      operationId: operation_post
+      requestBody:
+        description: Product to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /{id}:
+    delete:
+      summary: Deletes a product
+      operationId: "operation_delete_/{id}"
+      parameters:
+      - name: id
+        in: path
+        description: Product ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Price:
+      required:
+      - amount
+      - currency
+      type: object
+      properties:
+        currency:
+          type: string
+          enum:
+          - GBP
+          - SGD
+          - LKR
+          - USD
+        amount:
+          type: number
+          format: float
+    Product:
+      required:
+      - description
+      - name
+      - price
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          $ref: '#/components/schemas/Price'
+      description: |
+        Represents a product
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ErrorResponse:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'

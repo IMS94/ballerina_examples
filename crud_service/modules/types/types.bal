@@ -38,3 +38,15 @@ public type BadRequest record {|
 
     ErrorResponse body;    
 |};
+
+public type Headers record {|
+    string location;
+|};
+
+public type Created record {|
+    *http:Created;
+
+    Headers headers;
+
+    anydata body = null; 
+|};
