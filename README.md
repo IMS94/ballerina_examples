@@ -9,3 +9,5 @@ This repo contains projects written in [Ballerina programming language](https://
 
 * REST APIs
   - [Products API - A CRUD Example](http_crud_service)
+
+* GraphQL

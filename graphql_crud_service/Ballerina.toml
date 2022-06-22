@@ -1,0 +1,8 @@
+[package]
+org = "imesha"
+name = "graphql_crud_service"
+version = "0.1.0"
+distribution = "2201.1.1-rc1"
+
+[build-options]
+observabilityIncluded = true
