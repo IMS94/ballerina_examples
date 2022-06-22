@@ -1,6 +1,6 @@
 import ballerina/http;
 import ballerina/log;
-import crud_service.types;
+import http_crud_service.types;
 import ballerina/uuid;
 
 # The product service
