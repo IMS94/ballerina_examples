@@ -11,6 +11,18 @@ servers:
       default: "8080"
 paths:
   /:
+    get:
+      summary: List all products
+      operationId: operation_get
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
     put:
       summary: Update a product
       operationId: operation_put
@@ -39,6 +51,10 @@ paths:
       responses:
         "201":
           description: Created
+          headers:
+            location:
+              schema:
+                type: string
         "400":
           description: BadRequest
           content:
@@ -96,8 +112,7 @@ components:
           type: string
         price:
           $ref: '#/components/schemas/Price'
-      description: |
-        Represents a product
+      description: Represents a product
     Error:
       required:
       - code
